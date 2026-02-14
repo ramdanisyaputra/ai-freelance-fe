@@ -38,16 +38,15 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-white via-orange-50 to-orange-100">
       {/* Navigation */}
-      <nav className={`fixed top-0 w-full backdrop-blur-md z-50 transition-all duration-300 ${
-        isScrolled ? 'bg-white shadow-lg' : 'bg-white/80 shadow-sm'
-      }`}>
+      <nav className={`fixed top-0 w-full backdrop-blur-md z-50 transition-all duration-300 ${isScrolled ? 'bg-white shadow-lg' : 'bg-white/80 shadow-sm'
+        }`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <Link href="/" className="flex items-center space-x-2 transition-opacity hover:opacity-80">
               <div className="w-8 h-8 bg-[#FE5B00] rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">BA</span>
+                <span className="text-white font-bold text-sm">LA</span>
               </div>
-              <span className="font-bold text-xl text-gray-900">BidanAI</span>
+              <span className="font-bold text-xl text-gray-900">Lepas AI</span>
             </Link>
             <div className="hidden md:flex space-x-8">
               <a href="#features" className="text-gray-600 hover:text-[#FE5B00] transition-colors duration-200">Fitur</a>
@@ -76,7 +75,7 @@ export default function Home() {
                 <span className="text-[#FE5B00]">3 Menit</span>
               </h1>
               <p className="text-xl text-gray-600 mb-8 leading-relaxed">
-                AI Freelancer Assistant membantu web developer Indonesia mengubah brief klien 
+                AI Freelancer Assistant membantu web developer Indonesia mengubah brief klien
                 menjadi proposal profesional lengkap dengan estimasi harga dan timeline.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
@@ -168,7 +167,7 @@ export default function Home() {
               Semua yang kamu butuhkan untuk membuat proposal profesional dengan cepat
             </p>
           </div>
-          
+
           <div className="grid md:grid-cols-3 gap-8">
             <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 border border-gray-100 fade-in-scroll">
               <div className="w-14 h-14 bg-orange-100 rounded-xl flex items-center justify-center mb-6">
@@ -176,7 +175,7 @@ export default function Home() {
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-3">Analisis Brief Otomatis</h3>
               <p className="text-gray-600 leading-relaxed">
-                AI menganalisis brief klien dan mendeteksi ambiguitas. Jika ada yang kurang jelas, 
+                AI menganalisis brief klien dan mendeteksi ambiguitas. Jika ada yang kurang jelas,
                 sistem akan memberikan pertanyaan klarifikasi.
               </p>
             </div>
@@ -187,7 +186,7 @@ export default function Home() {
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-3">Generate Scope Kerja</h3>
               <p className="text-gray-600 leading-relaxed">
-                Dapatkan daftar scope pekerjaan yang realistis dan detail berdasarkan 
+                Dapatkan daftar scope pekerjaan yang realistis dan detail berdasarkan
                 kebutuhan klien dan skill stack kamu.
               </p>
             </div>
@@ -198,7 +197,7 @@ export default function Home() {
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-3">Estimasi Harga Akurat</h3>
               <p className="text-gray-600 leading-relaxed">
-                Sistem menghitung estimasi harga dan timeline berdasarkan kompleksitas 
+                Sistem menghitung estimasi harga dan timeline berdasarkan kompleksitas
                 proyek dan rate standar freelancer.
               </p>
             </div>
@@ -209,7 +208,7 @@ export default function Home() {
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-3">Proposal Siap Kirim</h3>
               <p className="text-gray-600 leading-relaxed">
-                Generate proposal profesional dalam bahasa Indonesia yang bisa langsung 
+                Generate proposal profesional dalam bahasa Indonesia yang bisa langsung
                 dikirim via WhatsApp atau email.
               </p>
             </div>
@@ -220,7 +219,7 @@ export default function Home() {
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-3">Proses Super Cepat</h3>
               <p className="text-gray-600 leading-relaxed">
-                Hasil dalam hitungan detik. Tidak perlu menunggu lama untuk mendapatkan 
+                Hasil dalam hitungan detik. Tidak perlu menunggu lama untuk mendapatkan
                 proposal yang berkualitas.
               </p>
             </div>
@@ -231,7 +230,7 @@ export default function Home() {
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-3">Custom Profil</h3>
               <p className="text-gray-600 leading-relaxed">
-                Set skill stack, rate type, dan minimal harga. Semua proposal akan 
+                Set skill stack, rate type, dan minimal harga. Semua proposal akan
                 disesuaikan dengan profil freelancer kamu.
               </p>
             </div>
@@ -296,7 +295,7 @@ export default function Home() {
             Siap Meningkatkan Produktivitas?
           </h2>
           <p className="text-xl text-white/90 mb-8">
-            Bergabung dengan ratusan freelancer Indonesia yang sudah menghemat waktu dengan BidanAI
+            Bergabung dengan ratusan freelancer Indonesia yang sudah menghemat waktu dengan Lepas AI
           </p>
           <Link href="/register" className="bg-white text-[#FE5B00] px-10 py-4 rounded-full font-bold text-lg hover:bg-gray-50 transition-all duration-200 hover:shadow-xl inline-block">
             Mulai Gratis Sekarang →
@@ -312,9 +311,9 @@ export default function Home() {
             <div>
               <div className="flex items-center space-x-2 mb-4">
                 <div className="w-8 h-8 bg-[#FE5B00] rounded-lg flex items-center justify-center">
-                  <span className="text-white font-bold text-sm">BA</span>
+                  <span className="text-white font-bold text-sm">LA</span>
                 </div>
-                <span className="font-bold text-xl text-white">BidanAI</span>
+                <span className="font-bold text-xl text-white">Lepas AI</span>
               </div>
               <p className="text-sm">
                 Membantu freelancer web developer Indonesia membuat proposal lebih cepat dan profesional.
