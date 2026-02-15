@@ -1,4 +1,3 @@
-
 import useSWR from 'swr'
 import axios from '@/lib/axios'
 import { useEffect, useCallback } from 'react'
@@ -113,5 +112,6 @@ export const useAuth = ({ middleware, redirectIfAuthenticated }: AuthProps = {})
         register,
         login,
         logout,
+        mutate,
     }
 }

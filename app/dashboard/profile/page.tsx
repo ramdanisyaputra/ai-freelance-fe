@@ -6,12 +6,14 @@ import Input from '@/components/ui/Input'
 import Button from '@/components/ui/Button'
 import { useState, useRef } from 'react'
 import axios from '@/lib/axios'
+import toast from 'react-hot-toast'
 
 export default function Profile() {
     const { user, mutate } = useAuth({ middleware: 'auth' })
-    const [status, setStatus] = useState<string | null>(null)
+    // const [status, setStatus] = useState<string | null>(null) // Deprecated
     const [errors, setErrors] = useState<any>({})
-    const [loading, setLoading] = useState(false)
+    const [isProfileLoading, setIsProfileLoading] = useState(false)
+    const [isPasswordLoading, setIsPasswordLoading] = useState(false)
     const fileInputRef = useRef<HTMLInputElement>(null)
 
     // Profile Form State
@@ -35,9 +37,9 @@ export default function Profile() {
 
     const updateProfile = async (e: React.FormEvent) => {
         e.preventDefault()
-        setLoading(true)
+        setIsProfileLoading(true)
         setErrors({})
-        setStatus(null)
+        // setStatus(null)
 
         const formData = new FormData()
         formData.append('name', name)
@@ -51,25 +53,26 @@ export default function Profile() {
                 headers: { 'Content-Type': 'multipart/form-data' },
             })
             mutate() // Refresh user data
-            setStatus('profile-updated')
+            toast.success('Profil berhasil diperbarui')
             setAvatar(null)
             // Keep preview or update it based on response? user data refresh should handle it
         } catch (error: any) {
             if (error.response?.status === 422) {
                 setErrors(error.response.data.errors)
             } else {
+                toast.error('Gagal memperbarui profil')
                 setErrors({ general: ['Something went wrong. Please try again.'] })
             }
         } finally {
-            setLoading(false)
+            setIsProfileLoading(false)
         }
     }
 
     const updatePassword = async (e: React.FormEvent) => {
         e.preventDefault()
-        setLoading(true)
+        setIsPasswordLoading(true)
         setErrors({})
-        setStatus(null)
+        // setStatus(null)
 
         try {
             await axios.put('/api/password/update', {
@@ -77,7 +80,7 @@ export default function Profile() {
                 password,
                 password_confirmation: passwordConfirmation,
             })
-            setStatus('password-updated')
+            toast.success('Password berhasil diperbarui')
             setCurrentPassword('')
             setPassword('')
             setPasswordConfirmation('')
@@ -85,10 +88,11 @@ export default function Profile() {
             if (error.response?.status === 422) {
                 setErrors(error.response.data.errors)
             } else {
+                toast.error('Gagal memperbarui password')
                 setErrors({ general: ['Something went wrong. Please try again.'] })
             }
         } finally {
-            setLoading(false)
+            setIsPasswordLoading(false)
         }
     }
 
@@ -163,12 +167,12 @@ export default function Profile() {
                         error={errors.email?.[0]}
                     />
 
-                    {status === 'profile-updated' && (
+                    {/* {status === 'profile-updated' && (
                         <p className="text-sm text-green-600">TERSAVE.</p>
-                    )}
+                    )} */}
 
                     <div className="flex justify-end">
-                        <Button type="submit" isLoading={loading} className="w-auto px-6">
+                        <Button type="submit" isLoading={isProfileLoading} className="w-auto px-6">
                             Simpan
                         </Button>
                     </div>
@@ -207,12 +211,12 @@ export default function Profile() {
                         required
                     />
 
-                    {status === 'password-updated' && (
+                    {/* {status === 'password-updated' && (
                         <p className="text-sm text-green-600">TERSAVE.</p>
-                    )}
+                    )} */}
 
                     <div className="flex justify-end">
-                        <Button type="submit" isLoading={loading} className="w-auto px-6">
+                        <Button type="submit" isLoading={isPasswordLoading} className="w-auto px-6">
                             Simpan
                         </Button>
                     </div>
