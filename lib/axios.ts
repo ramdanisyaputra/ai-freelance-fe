@@ -14,7 +14,7 @@ axios.interceptors.request.use((config) => {
     const token = localStorage.getItem('token')
     if (token) {
         config.headers.Authorization = `Bearer ${token}`
-        console.log('Attaching API Token:', token.substring(0, 10) + '...')
+        // console.log('Attaching API Token:', token.substring(0, 10) + '...')
     }
     return config
 })

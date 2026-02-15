@@ -84,10 +84,15 @@ export const useAuth = ({ middleware, redirectIfAuthenticated }: AuthProps = {})
         if (!error) {
             await axios.post('/api/logout').then(() => {
                 localStorage.removeItem('token')
-                // Remove cookies as requested
-                Cookies.remove('laravel_session')
-                Cookies.remove('XSRF-TOKEN')
-                mutate()
+
+                // CRITICAL: Ensure we remove cookies from the root path
+                Cookies.remove('laravel_session', { path: '/' })
+                Cookies.remove('XSRF-TOKEN', { path: '/' })
+
+                // Force SWR to revalidate and clear user data
+                mutate(undefined, false)
+
+                window.location.pathname = '/login'
             })
         }
 
