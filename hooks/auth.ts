@@ -3,11 +3,13 @@ import useSWR from 'swr'
 import axios from '@/lib/axios'
 import { useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
+import Cookies from 'js-cookie'
 
 interface User {
     id: number
     name: string
     email: string
+    avatar?: string
     email_verified_at: string
     created_at: string
     updated_at: string
@@ -40,8 +42,15 @@ export const useAuth = ({ middleware, redirectIfAuthenticated }: AuthProps = {})
         setErrors([])
 
         axios
-            .post('/register', props)
-            .then(() => mutate())
+            .post('/api/register', props)
+            .then((res) => {
+                // Response is wrapped in { data: { ... } } by ResponseTrait
+                const token = res.data.data?.token || res.data.token
+                if (token) {
+                    localStorage.setItem('token', token)
+                }
+                mutate()
+            })
             .catch(error => {
                 if (error.response.status !== 422) throw error
 
@@ -57,8 +66,14 @@ export const useAuth = ({ middleware, redirectIfAuthenticated }: AuthProps = {})
         if (setStatus) setStatus(null)
 
         axios
-            .post('/login', props)
-            .then(() => mutate())
+            .post('/api/login', props)
+            .then((res) => {
+                const token = res.data.data?.token || res.data.token
+                if (token) {
+                    localStorage.setItem('token', token)
+                }
+                mutate()
+            })
             .catch(error => {
                 if (error.response.status !== 422) throw error
 
@@ -68,11 +83,19 @@ export const useAuth = ({ middleware, redirectIfAuthenticated }: AuthProps = {})
 
     const logout = useCallback(async () => {
         if (!error) {
-            await axios.post('/logout').then(() => mutate())
+            await axios.post('/api/logout').then(() => {
+                localStorage.removeItem('token')
+                // Remove cookies as requested
+                Cookies.remove('laravel_session')
+                Cookies.remove('XSRF-TOKEN')
+                mutate()
+            })
         }
 
         window.location.pathname = '/login'
     }, [error, mutate])
+
+
 
     useEffect(() => {
         if (middleware === 'guest' && redirectIfAuthenticated && user)

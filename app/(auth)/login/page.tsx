@@ -226,7 +226,7 @@ export default function Login() {
 
                     {/* Social Login */}
                     <div className="grid grid-cols-2 gap-4">
-                        <button className="flex items-center justify-center px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                        <button className="flex items-center justify-center px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer">
                             <svg className="w-5 h-5" viewBox="0 0 24 24">
                                 <path
                                     fill="currentColor"
@@ -237,7 +237,7 @@ export default function Login() {
                                 Google
                             </span>
                         </button>
-                        <button className="flex items-center justify-center px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                        <button className="flex items-center justify-center px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer">
                             <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                                 <path
                                     fillRule="evenodd"
