@@ -22,25 +22,30 @@ interface AuthProps {
 export const useAuth = ({ middleware, redirectIfAuthenticated }: AuthProps = {}) => {
     const router = useRouter()
 
-    const { data: user, error, mutate } = useSWR<User>('/api/user', () =>
-        axios
+    const { data: user, error, mutate } = useSWR<User | null>('/api/user', () => {
+        if (typeof window !== 'undefined' && !localStorage.getItem('token')) {
+            return null
+        }
+
+        return axios
             .get('/api/user')
             .then(res => res.data)
             .catch(error => {
+                if (error.response.status === 401) return null
                 if (error.response.status !== 409) throw error
+
                 router.push('/verify-email')
-            }),
-    )
+            })
+    })
 
     const csrf = () => axios.get('/sanctum/csrf-cookie')
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const register = async ({ setErrors, ...props }: { setErrors: (e: any) => void;[key: string]: any }) => {
         await csrf()
 
         setErrors([])
 
-        axios
+        await axios
             .post('/api/register', props)
             .then((res) => {
                 // Response is wrapped in { data: { ... } } by ResponseTrait
@@ -64,7 +69,7 @@ export const useAuth = ({ middleware, redirectIfAuthenticated }: AuthProps = {})
         setErrors([])
         if (setStatus) setStatus(null)
 
-        axios
+        await axios
             .post('/api/login', props)
             .then((res) => {
                 const token = res.data.data?.token || res.data.token
@@ -109,7 +114,7 @@ export const useAuth = ({ middleware, redirectIfAuthenticated }: AuthProps = {})
             user?.email_verified_at
         )
             router.push(redirectIfAuthenticated || '/dashboard')
-        if (middleware === 'auth' && error) logout()
+        if (middleware === 'auth' && (error || user === null)) logout()
     }, [user, error, middleware, redirectIfAuthenticated, router, logout])
 
     return {

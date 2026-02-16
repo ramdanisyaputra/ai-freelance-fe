@@ -17,6 +17,7 @@ export default function Login() {
     })
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [errors, setErrors] = useState<any>([])
+    const [serverError, setServerError] = useState<string | null>(null)
     // const [status, setStatus] = useState(null)
     const [isLoading, setIsLoading] = useState(false)
     const [showPassword, setShowPassword] = useState(false)
@@ -28,11 +29,14 @@ export default function Login() {
             [name]: type === 'checkbox' ? checked : value,
         }))
         setErrors([])
+        setServerError(null)
     }
 
     const submitForm = async (event: React.FormEvent) => {
         event.preventDefault()
         setIsLoading(true)
+        setServerError(null)
+        setErrors([])
 
         try {
             await login({
@@ -41,6 +45,13 @@ export default function Login() {
                 remember: formData.remember,
                 setErrors,
             })
+        } catch (error: any) {
+            const serverMessage = error.response?.data?.message;
+            if (serverMessage) {
+                setServerError(serverMessage);
+            } else {
+                setServerError('Terjadi kesalahan pada server. Silakan coba lagi.');
+            }
         } finally {
             setIsLoading(false)
         }
@@ -77,6 +88,15 @@ export default function Login() {
                             Masuk ke akun Lepas AI kamu
                         </p>
                     </div>
+
+                    {serverError && (
+                        <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start space-x-3">
+                            <svg className="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <p className="text-sm text-red-600">{serverError}</p>
+                        </div>
+                    )}
 
                     <form onSubmit={submitForm} noValidate>
                         {/* Email Field */}
