@@ -4,7 +4,7 @@ import { Toaster } from 'react-hot-toast'
 import React from 'react'
 import Sidebar from '@/components/dashboard/Sidebar'
 import Header from '@/components/dashboard/Header'
-import { useAuth } from '@/hooks/auth'
+import { useAuth } from '@/features/auth/hooks/useAuth'
 
 export default function DashboardLayout({
     children,

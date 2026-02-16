@@ -4,12 +4,25 @@ import { useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import Cookies from 'js-cookie'
 
+interface FreelancerProfile {
+    id: number
+    user_id: number
+    role: string
+    stack: string[]
+    rate_type: 'fixed' | 'hourly'
+    min_price: number
+    currency: string
+    created_at: string
+    updated_at: string
+}
+
 interface User {
     id: number
     name: string
     email: string
     avatar?: string
     email_verified_at: string
+    freelancer_profile?: FreelancerProfile
     created_at: string
     updated_at: string
 }
@@ -87,18 +100,24 @@ export const useAuth = ({ middleware, redirectIfAuthenticated }: AuthProps = {})
 
     const logout = useCallback(async () => {
         if (!error) {
-            await axios.post('/api/logout').then(() => {
-                localStorage.removeItem('token')
+            const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null
 
-                // CRITICAL: Ensure we remove cookies from the root path
-                Cookies.remove('laravel_session', { path: '/' })
-                Cookies.remove('XSRF-TOKEN', { path: '/' })
+            if (token) {
+                try {
+                    await axios.post('/api/logout')
+                } catch (e) {
+                    // Ignore errors during logout (like 419 Page Expired or 401 Unauthorized)
+                    // We want to clear local state regardless
+                }
+            }
 
-                // Force SWR to revalidate and clear user data
-                mutate(undefined, false)
+            localStorage.removeItem('token')
 
-                window.location.pathname = '/login'
-            })
+            // CRITICAL: Ensure we remove cookies from the root path
+            Cookies.remove('laravel_session', { path: '/' })
+            Cookies.remove('XSRF-TOKEN', { path: '/' })
+
+            mutate(undefined, false)
         }
 
         window.location.pathname = '/login'

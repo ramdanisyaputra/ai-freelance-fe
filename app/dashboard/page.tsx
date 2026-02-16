@@ -2,7 +2,7 @@
 
 import React from 'react'
 import Card from '@/components/ui/Card'
-import { useAuth } from '@/hooks/auth'
+import { useAuth } from '@/features/auth/hooks/useAuth'
 
 export default function Dashboard() {
     const { user } = useAuth({ middleware: 'auth' })

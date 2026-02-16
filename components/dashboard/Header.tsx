@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
-import { useAuth } from '@/hooks/auth'
+import { useAuth } from '@/features/auth/hooks/useAuth'
 import Link from 'next/link'
 
 interface HeaderProps {
@@ -68,13 +68,6 @@ export default function Header({ onMenuClick }: HeaderProps) {
                                 onClick={() => setIsProfileOpen(false)}
                             >
                                 Profil Saya
-                            </Link>
-                            <Link
-                                href="/dashboard/settings"
-                                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
-                                onClick={() => setIsProfileOpen(false)}
-                            >
-                                Pengaturan
                             </Link>
                             <div className="border-t border-gray-100 my-1"></div>
                             <button
