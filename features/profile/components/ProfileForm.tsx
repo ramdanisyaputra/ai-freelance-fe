@@ -10,7 +10,7 @@ import { useState, useRef, useEffect } from 'react'
 
 export default function ProfileForm() {
     const { user, mutate } = useAuth({ middleware: 'auth' })
-    const { updateProfile: updateProfileAPI, updatePassword: updatePasswordAPI, isLoading, errors } = useProfile()
+    const { updateProfile: updateProfileAPI, updatePassword: updatePasswordAPI, isProfileLoading, isPasswordLoading, errors } = useProfile()
     const fileInputRef = useRef<HTMLInputElement>(null)
 
     // Profile Form State
@@ -264,7 +264,7 @@ export default function ProfileForm() {
                     </div>
 
                     <div className="flex justify-end">
-                        <Button type="submit" isLoading={isLoading} className="w-auto px-6">
+                        <Button type="submit" isLoading={isProfileLoading} className="w-auto px-6">
                             Simpan Perubahan
                         </Button>
                     </div>
@@ -306,7 +306,7 @@ export default function ProfileForm() {
                     </div>
 
                     <div className="flex justify-end">
-                        <Button type="submit" isLoading={isLoading} className="w-auto px-6">
+                        <Button type="submit" isLoading={isPasswordLoading} className="w-auto px-6">
                             Simpan Password
                         </Button>
                     </div>
