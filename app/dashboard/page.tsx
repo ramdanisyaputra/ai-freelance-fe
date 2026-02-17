@@ -3,6 +3,7 @@
 import React from 'react'
 import Card from '@/components/ui/Card'
 import { useAuth } from '@/features/auth/hooks/useAuth'
+import Link from 'next/link'
 
 export default function Dashboard() {
     const { user } = useAuth({ middleware: 'auth' })
@@ -21,9 +22,9 @@ export default function Dashboard() {
                     <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
                     <p className="text-gray-500">Selamat datang kembali, {user?.name}!</p>
                 </div>
-                <button className="bg-[#FE5B00] text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-[#E54F00] transition-colors shadow-sm">
+                <Link href="/dashboard/proposal/create" className="bg-[#FE5B00] text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-[#E54F00] transition-colors shadow-sm">
                     Buat Proposal Baru
-                </button>
+                </Link>
             </div>
 
             {/* Stats Grid */}
