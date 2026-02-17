@@ -7,12 +7,16 @@ import { useRouter } from 'next/navigation'
 import { useProposalDetail } from '../hooks/useProposalDetail'
 import RichEditor from '@/components/editor/RichEditor'
 
+import Link from 'next/link'
+import toast from 'react-hot-toast'
+import axios from '@/lib/axios'
+
 interface ProposalDetailProps {
     id: string
 }
 
 export default function ProposalDetail({ id }: ProposalDetailProps) {
-    const { proposal, isLoading, isError } = useProposalDetail(id)
+    const { proposal, isLoading, isError, mutate } = useProposalDetail(id)
     const router = useRouter()
     const [isEditing, setIsEditing] = useState(false)
     const [editedContent, setEditedContent] = useState('')
@@ -20,7 +24,7 @@ export default function ProposalDetail({ id }: ProposalDetailProps) {
     const copyToClipboard = () => {
         if (proposal?.content) {
             navigator.clipboard.writeText(proposal.content)
-            alert('Proposal text successfully copied!')
+            toast.success('Proposal copied to clipboard!')
         }
     }
 
@@ -30,10 +34,21 @@ export default function ProposalDetail({ id }: ProposalDetailProps) {
     }
 
     const handleSave = async () => {
-        // TODO: Implement save functionality
-        console.log('Saving edited content:', editedContent)
-        setIsEditing(false)
-        alert('Proposal saved! (API integration pending)')
+        if (!proposal) return
+
+        const loadingToast = toast.loading('Saving changes...')
+        try {
+            await axios.put(`/api/proposals/${id}`, {
+                content: editedContent
+            })
+
+            await mutate()
+            setIsEditing(false)
+            toast.success('Proposal updated successfully!', { id: loadingToast })
+        } catch (error) {
+            console.error('Failed to update proposal:', error)
+            toast.error('Failed to update proposal', { id: loadingToast })
+        }
     }
 
     const handleCancel = () => {

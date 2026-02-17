@@ -4,6 +4,8 @@ import Placeholder from '@tiptap/extension-placeholder'
 import Image from '@tiptap/extension-image'
 import Link from '@tiptap/extension-link'
 import Underline from '@tiptap/extension-underline'
+import TaskList from '@tiptap/extension-task-list'
+import TaskItem from '@tiptap/extension-task-item'
 import { Color } from '@tiptap/extension-color'
 import { TextStyle } from '@tiptap/extension-text-style'
 import TextAlign from '@tiptap/extension-text-align'
@@ -33,6 +35,14 @@ export default function RichEditor({
             StarterKit.configure({
                 heading: {
                     levels: [2, 3, 4]
+                },
+                bulletList: {
+                    keepMarks: true,
+                    keepAttributes: false,
+                },
+                orderedList: {
+                    keepMarks: true,
+                    keepAttributes: false,
                 }
             }),
             Placeholder.configure({
@@ -50,6 +60,14 @@ export default function RichEditor({
                 HTMLAttributes: {
                     class: 'text-blue-600 underline hover:text-blue-800'
                 }
+            }),
+            TaskList.configure({
+                HTMLAttributes: {
+                    class: 'not-prose pl-2 space-y-2',
+                },
+            }),
+            TaskItem.configure({
+                nested: true,
             }),
             Underline,
             TextStyle,
@@ -282,6 +300,14 @@ export default function RichEditor({
                         </button>
                         <button
                             type="button"
+                            onClick={() => editor.chain().focus().toggleTaskList().run()}
+                            className={`p-1.5 rounded hover:bg-gray-200 transition-colors text-gray-700 ${editor.isActive('taskList') ? 'bg-gray-300' : ''}`}
+                            title="Task List"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 11l3 3L22 4" /><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" /></svg>
+                        </button>
+                        <button
+                            type="button"
                             onClick={() => editor.chain().focus().toggleBlockquote().run()}
                             className={`p-1.5 rounded hover:bg-gray-200 transition-colors text-gray-700 ${editor.isActive('blockquote') ? 'bg-gray-300' : ''}`}
                             title="Quote"
@@ -289,6 +315,29 @@ export default function RichEditor({
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z" /><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z" /></svg>
                         </button>
                     </div>
+
+                    {/* Indentation */}
+                    <div className="flex gap-0.5 mr-2 pr-2 border-r border-gray-300">
+                        <button
+                            type="button"
+                            onClick={() => editor.chain().focus().sinkListItem('listItem').run()}
+                            disabled={!editor.can().sinkListItem('listItem')}
+                            className="p-1.5 rounded hover:bg-gray-200 transition-colors text-gray-700 disabled:opacity-40"
+                            title="Indent"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="21" y1="4" x2="3" y2="4" /><line x1="21" y1="12" x2="3" y2="12" /><line x1="21" y1="20" x2="3" y2="20" /><polyline points="12 8 8 12 12 16" /></svg>
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => editor.chain().focus().liftListItem('listItem').run()}
+                            disabled={!editor.can().liftListItem('listItem')}
+                            className="p-1.5 rounded hover:bg-gray-200 transition-colors text-gray-700 disabled:opacity-40"
+                            title="Outdent"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="21" y1="4" x2="3" y2="4" /><line x1="21" y1="12" x2="3" y2="12" /><line x1="21" y1="20" x2="3" y2="20" /><polyline points="8 8 12 12 8 16" /></svg>
+                        </button>
+                    </div>
+
 
                     {/* Extras */}
                     <div className="flex gap-0.5">
@@ -310,8 +359,9 @@ export default function RichEditor({
                         </button>
                     </div>
                 </div>
-            )}
+            )
+            }
             <EditorContent editor={editor} className="bg-white" />
-        </div>
+        </div >
     )
 }
