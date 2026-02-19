@@ -66,7 +66,7 @@ export default function ProposalList() {
                                 </div>
 
                                 <h3 className="text-lg font-bold text-gray-900 group-hover:text-[#FE5B00] transition-colors line-clamp-1">
-                                    {proposal.summary || 'Proposal Proyek'}
+                                    {proposal.title || proposal.summary || 'Proposal Proyek'}
                                 </h3>
                                 <p className="text-sm text-gray-500 line-clamp-2 leading-relaxed">
                                     {proposal.brief}

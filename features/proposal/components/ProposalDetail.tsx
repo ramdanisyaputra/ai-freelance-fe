@@ -33,6 +33,36 @@ export default function ProposalDetail({ id }: ProposalDetailProps) {
         setIsEditing(true)
     }
 
+    const handleExportPdf = async () => {
+        if (!proposal) return
+
+        const loadingToast = toast.loading('Generating PDF...')
+        try {
+            const response = await axios.get(`/api/proposals/${id}/pdf`, {
+                responseType: 'blob'
+            })
+
+            // Create blob link to download
+            const url = window.URL.createObjectURL(new Blob([response.data]))
+            const link = document.createElement('a')
+            link.href = url
+            link.setAttribute('download', `proposal-${id}.pdf`)
+
+            // Append to html link element page
+            document.body.appendChild(link)
+
+            // Start download
+            link.click()
+
+            // Clean up and remove the link
+            link.parentNode?.removeChild(link)
+            toast.success('PDF downloaded successfully!', { id: loadingToast })
+        } catch (error) {
+            console.error('Failed to export PDF:', error)
+            toast.error('Failed to generate PDF', { id: loadingToast })
+        }
+    }
+
     const handleSave = async () => {
         if (!proposal) return
 
@@ -98,7 +128,7 @@ export default function ProposalDetail({ id }: ProposalDetailProps) {
                         </svg>
                         Kembali
                     </button>
-                    <h1 className="text-2xl font-bold text-gray-900 line-clamp-1">{proposal.summary || 'Detail Proposal'}</h1>
+                    <h1 className="text-2xl font-bold text-gray-900 line-clamp-1">{proposal.title || proposal.summary || 'Detail Proposal'}</h1>
                 </div>
                 <div className="flex gap-2">
                     <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${proposal.status === 'sent' ? 'bg-green-100 text-green-800' :
@@ -155,7 +185,43 @@ export default function ProposalDetail({ id }: ProposalDetailProps) {
 
                 {/* Right Column: Proposal Text */}
                 <div className="lg:col-span-2">
-                    <Card title="Proposal Siap Kirim">
+                    <Card
+                        title="Proposal Siap Kirim"
+                        action={
+                            !isEditing && proposal ? (
+                                <div className="flex gap-2">
+                                    <button
+                                        onClick={handleExportPdf}
+                                        className="bg-white/90 backdrop-blur shadow-sm border border-gray-200 text-gray-700 px-3 py-1.5 rounded-md text-xs font-medium hover:bg-gray-50 transition-colors flex items-center gap-1.5"
+                                        title="Export PDF"
+                                    >
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                        </svg>
+                                        PDF
+                                    </button>
+                                    <button
+                                        onClick={handleEdit}
+                                        className="bg-white/90 backdrop-blur shadow-sm border border-gray-200 text-gray-700 px-3 py-1.5 rounded-md text-xs font-medium hover:bg-gray-50 transition-colors flex items-center gap-1.5"
+                                    >
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                        </svg>
+                                        Edit
+                                    </button>
+                                    <button
+                                        onClick={copyToClipboard}
+                                        className="bg-white/90 backdrop-blur shadow-sm border border-gray-200 text-gray-700 px-3 py-1.5 rounded-md text-xs font-medium hover:bg-gray-50 transition-colors flex items-center gap-1.5"
+                                    >
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+                                        </svg>
+                                        Copy
+                                    </button>
+                                </div>
+                            ) : undefined
+                        }
+                    >
                         <div className="space-y-4">
                             {!isEditing ? (
                                 <div className="relative">
@@ -163,26 +229,6 @@ export default function ProposalDetail({ id }: ProposalDetailProps) {
                                         className="prose prose-sm sm:prose-base max-w-none min-h-[600px] px-4 py-3 text-gray-900 prose-headings:text-gray-900 prose-headings:font-bold prose-headings:mt-6 prose-headings:mb-3 prose-p:text-gray-700 prose-p:my-3 prose-strong:text-gray-900 prose-ul:text-gray-700 prose-ul:my-3 prose-ul:list-disc prose-ul:pl-6 prose-ol:text-gray-700 prose-ol:my-3 prose-ol:list-decimal prose-ol:pl-6 prose-li:my-1 prose-blockquote:border-l-4 prose-blockquote:border-gray-300 prose-blockquote:pl-4 prose-blockquote:italic prose-a:text-blue-600 prose-a:underline prose-img:rounded-lg prose-img:border prose-img:border-gray-200 prose-hr:my-4 prose-hr:border-gray-200 border border-gray-200 rounded-xl overflow-hidden"
                                         dangerouslySetInnerHTML={{ __html: proposal.content || '' }}
                                     />
-                                    <div className="absolute top-4 right-4 flex gap-2">
-                                        <button
-                                            onClick={handleEdit}
-                                            className="bg-white/90 backdrop-blur shadow-sm border border-gray-200 text-gray-700 px-3 py-1.5 rounded-md text-xs font-medium hover:bg-gray-50 transition-colors flex items-center gap-1.5"
-                                        >
-                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                            </svg>
-                                            Edit
-                                        </button>
-                                        <button
-                                            onClick={copyToClipboard}
-                                            className="bg-white/90 backdrop-blur shadow-sm border border-gray-200 text-gray-700 px-3 py-1.5 rounded-md text-xs font-medium hover:bg-gray-50 transition-colors flex items-center gap-1.5"
-                                        >
-                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
-                                            </svg>
-                                            Copy
-                                        </button>
-                                    </div>
                                 </div>
                             ) : (
                                 <div>

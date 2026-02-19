@@ -2,6 +2,7 @@ export interface Proposal {
     id: number
     brief: string
     user_brief: string | null
+    title: string | null
     summary: string | null
     scope: string[]
     duration_days: number
