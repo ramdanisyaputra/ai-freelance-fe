@@ -5,14 +5,33 @@ import Card from '@/components/ui/Card'
 import { useAuth } from '@/features/auth/hooks/useAuth'
 import Link from 'next/link'
 
+import { useProposals } from '@/features/proposal/hooks/useProposals'
+
 export default function Dashboard() {
     const { user } = useAuth({ middleware: 'auth' })
 
+    const { proposals, isLoading } = useProposals()
+
+    // Calculate stats
+    const totalProposals = proposals.length
+    const recentProposals = [...proposals].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()).slice(0, 5)
+
+    // Calculate total value (simple sum of all proposal prices)
+    const totalValue = proposals.reduce((acc, curr) => acc + curr.price, 0)
+
     const stats = [
-        { title: 'Total Proyek', value: '12', change: '+2.5%', color: 'bg-blue-50 text-blue-600' },
-        { title: 'Proposal Terkirim', value: '24', change: '+12%', color: 'bg-green-50 text-green-600' },
-        { title: 'Pendapatan', value: 'Rp 45.2Jt', change: '+4.3%', color: 'bg-orange-50 text-orange-600' },
-        { title: 'Klien Aktif', value: '5', change: '0%', color: 'bg-purple-50 text-purple-600' },
+        {
+            title: 'Total Proposal',
+            value: totalProposals.toString(),
+            change: 'All time',
+            color: 'bg-blue-50 text-blue-600'
+        },
+        {
+            title: 'Estimasi Nilai',
+            value: new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(totalValue),
+            change: 'Potential',
+            color: 'bg-green-50 text-green-600'
+        },
     ]
 
     return (
@@ -28,13 +47,13 @@ export default function Dashboard() {
             </div>
 
             {/* Stats Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {stats.map((stat, index) => (
                     <Card key={index} className="flex flex-col">
                         <p className="text-sm font-medium text-gray-500">{stat.title}</p>
                         <div className="flex items-baseline mt-2">
                             <span className="text-3xl font-bold text-gray-900">{stat.value}</span>
-                            <span className={`ml-2 text-xs font-medium px-2 py-0.5 rounded-full ${stat.change.startsWith('+') ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}>
+                            <span className="ml-2 text-xs font-medium px-2 py-0.5 rounded-full bg-gray-100 text-gray-800">
                                 {stat.change}
                             </span>
                         </div>
@@ -44,78 +63,95 @@ export default function Dashboard() {
 
             {/* Recent Activity & Quick Actions */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <Card className="lg:col-span-2" title="Proyek Terbaru">
-                    <div className="overflow-x-auto">
-                        <table className="min-w-full divide-y divide-gray-200">
-                            <thead>
-                                <tr>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Proyek</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Klien</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nilai</th>
-                                </tr>
-                            </thead>
-                            <tbody className="bg-white divide-y divide-gray-200 text-sm">
-                                <tr>
-                                    <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Redesain Website Corporate</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-gray-500">PT Maju Sejahtera</td>
-                                    <td className="px-6 py-4 whitespace-nowrap">
-                                        <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Active</span>
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-gray-500">Rp 12.000.000</td>
-                                </tr>
-                                <tr>
-                                    <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Aplikasi Mobile E-Commerce</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-gray-500">Toko Berkah</td>
-                                    <td className="px-6 py-4 whitespace-nowrap">
-                                        <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">Pending</span>
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-gray-500">Rp 25.000.000</td>
-                                </tr>
-                                <tr>
-                                    <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-900">SEO Optimization</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-gray-500">CV Digital Kreatif</td>
-                                    <td className="px-6 py-4 whitespace-nowrap">
-                                        <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">Completed</span>
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-gray-500">Rp 5.000.000</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                <Card className="lg:col-span-2" title="Proposal Terkini">
+                    {isLoading ? (
+                        <div className="animate-pulse space-y-4">
+                            {[...Array(3)].map((_, i) => (
+                                <div key={i} className="h-12 bg-gray-100 rounded"></div>
+                            ))}
+                        </div>
+                    ) : recentProposals.length > 0 ? (
+                        <div className="overflow-x-auto">
+                            <table className="min-w-full divide-y divide-gray-200">
+                                <thead>
+                                    <tr>
+                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Judul Proposal</th>
+                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Dibuat</th>
+                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nilai</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="bg-white divide-y divide-gray-200 text-sm">
+                                    {recentProposals.map((proposal) => (
+                                        <tr key={proposal.id}>
+                                            <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-900 max-w-xs truncate">
+                                                <Link href={`/dashboard/proposal/${proposal.id}`} className="hover:text-[#FE5B00]">
+                                                    {proposal.title || proposal.summary || 'Proposal Proyek'}
+                                                </Link>
+                                            </td>
+                                            <td className="px-6 py-4 whitespace-nowrap">
+                                                <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${proposal.status === 'completed' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}>
+                                                    {proposal.status || 'Draft'}
+                                                </span>
+                                            </td>
+                                            <td className="px-6 py-4 whitespace-nowrap text-gray-500">
+                                                {new Date(proposal.created_at).toLocaleDateString('id-ID')}
+                                            </td>
+                                            <td className="px-6 py-4 whitespace-nowrap text-gray-500">
+                                                {new Intl.NumberFormat('id-ID', { style: 'currency', currency: proposal.currency }).format(proposal.price)}
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    ) : (
+                        <p className="text-gray-500 text-center py-4">Belum ada proposal yang dibuat.</p>
+                    )}
                 </Card>
 
                 <Card title="Aktivitas Terkini">
-                    <ul className="space-y-4">
-                        <li className="flex items-start">
-                            <div className="flex-shrink-0">
-                                <div className="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
-                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                                    </svg>
+                    {isLoading ? (
+                        <div className="animate-pulse space-y-4">
+                            {[...Array(3)].map((_, i) => (
+                                <div key={i} className="flex gap-4">
+                                    <div className="h-8 w-8 bg-gray-100 rounded-full"></div>
+                                    <div className="flex-1 space-y-2">
+                                        <div className="h-4 bg-gray-100 rounded w-3/4"></div>
+                                        <div className="h-3 bg-gray-100 rounded w-1/2"></div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="ml-3">
-                                <p className="text-sm font-medium text-gray-900">Proposal Baru Dibuat</p>
-                                <p className="text-xs text-gray-500">Untuk Proyek "App Marketplace"</p>
-                                <p className="text-xs text-gray-400 mt-1">2 jam yang lalu</p>
-                            </div>
-                        </li>
-                        <li className="flex items-start">
-                            <div className="flex-shrink-0">
-                                <div className="h-8 w-8 rounded-full bg-green-100 flex items-center justify-center text-green-600">
-                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                    </svg>
-                                </div>
-                            </div>
-                            <div className="ml-3">
-                                <p className="text-sm font-medium text-gray-900">Pembayaran Diterima</p>
-                                <p className="text-xs text-gray-500">Dari PT Maju Sejahtera</p>
-                                <p className="text-xs text-gray-400 mt-1">Kemarin</p>
-                            </div>
-                        </li>
-                    </ul>
+                            ))}
+                        </div>
+                    ) : recentProposals.length > 0 ? (
+                        <ul className="space-y-4">
+                            {recentProposals.map((proposal) => (
+                                <li key={proposal.id} className="flex items-start">
+                                    <div className="flex-shrink-0">
+                                        <div className="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
+                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <div className="ml-3">
+                                        <p className="text-sm font-medium text-gray-900">Proposal Baru Dibuat</p>
+                                        <p className="text-xs text-gray-500 line-clamp-1">Untuk "{proposal.title || proposal.summary || 'Proyek Tanpa Judul'}"</p>
+                                        <p className="text-xs text-gray-400 mt-1">
+                                            {new Date(proposal.created_at).toLocaleDateString('id-ID', {
+                                                day: 'numeric',
+                                                month: 'short',
+                                                hour: '2-digit',
+                                                minute: '2-digit'
+                                            })}
+                                        </p>
+                                    </div>
+                                </li>
+                            ))}
+                        </ul>
+                    ) : (
+                        <p className="text-gray-500 text-center py-4 text-sm">Belum ada aktivitas.</p>
+                    )}
                 </Card>
             </div>
         </div>

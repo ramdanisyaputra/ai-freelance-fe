@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import HeroAnimation from '@/components/landing/HeroAnimation';
 
 export default function Home() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -51,7 +52,6 @@ export default function Home() {
             <div className="hidden md:flex space-x-8">
               <a href="#features" className="text-gray-600 hover:text-[#FE5B00] transition-colors duration-200">Fitur</a>
               <a href="#how-it-works" className="text-gray-600 hover:text-[#FE5B00] transition-colors duration-200">Cara Kerja</a>
-              <a href="#pricing" className="text-gray-600 hover:text-[#FE5B00] transition-colors duration-200">Harga</a>
             </div>
             <div className="flex space-x-4">
               <Link href="/login" className="text-[#FE5B00] hover:text-[#E54F00] transition-colors duration-200 font-medium flex items-center">
@@ -82,9 +82,6 @@ export default function Home() {
                 <Link href="/register" className="bg-[#FE5B00] text-white px-8 py-4 rounded-full font-semibold hover:bg-[#E54F00] transition-all duration-200 hover:shadow-xl text-lg text-center">
                   Coba Sekarang - Gratis
                 </Link>
-                <button className="border-2 border-[#FE5B00] text-[#FE5B00] px-8 py-4 rounded-full font-semibold hover:bg-[#FE5B00] hover:text-white transition-all duration-200 text-lg">
-                  Lihat Demo
-                </button>
               </div>
               <div className="mt-8 flex items-center space-x-6 text-sm text-gray-600">
                 <div className="flex items-center space-x-2">
@@ -98,31 +95,7 @@ export default function Home() {
               </div>
             </div>
             <div className="relative">
-              <div className="bg-white rounded-2xl shadow-2xl p-8 border border-gray-100 hover:shadow-3xl transition-shadow duration-300">
-                <div className="space-y-4">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                    <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-                    <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                  </div>
-                  <div className="bg-gray-50 p-4 rounded-lg">
-                    <p className="text-sm text-gray-600 mb-2 font-medium">Input Brief:</p>
-                    <p className="text-gray-800 italic">&quot;Saya butuh website company profile dengan admin panel...&quot;</p>
-                  </div>
-                  <div className="flex justify-center py-2">
-                    <div className="w-8 h-8 border-4 border-[#FE5B00] border-t-transparent rounded-full animate-spin"></div>
-                  </div>
-                  <div className="bg-gradient-to-r from-orange-50 to-orange-100 p-4 rounded-lg border-l-4 border-[#FE5B00]">
-                    <p className="text-sm text-gray-600 mb-2 font-medium">✨ Proposal Siap:</p>
-                    <div className="space-y-2 text-sm text-gray-700">
-                      <p>• Scope: 5 halaman</p>
-                      <p>• Durasi: 21 hari</p>
-                      <p>• Harga: Rp 7.500.000</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="absolute -z-10 top-10 right-10 w-72 h-72 bg-[#FE5B00] rounded-full opacity-10 blur-3xl"></div>
+              <HeroAnimation />
             </div>
           </div>
         </div>
@@ -322,9 +295,8 @@ export default function Home() {
             <div>
               <h4 className="font-semibold text-white mb-4">Produk</h4>
               <ul className="space-y-2 text-sm">
-                <li><a href="#" className="hover:text-[#FE5B00] transition-colors">Fitur</a></li>
-                <li><a href="#" className="hover:text-[#FE5B00] transition-colors">Harga</a></li>
-                <li><a href="#" className="hover:text-[#FE5B00] transition-colors">Demo</a></li>
+                <li><Link href="#features" className="hover:text-[#FE5B00] transition-colors">Fitur</Link></li>
+                <li><Link href="#how-it-works" className="hover:text-[#FE5B00] transition-colors">Cara Kerja</Link></li>
               </ul>
             </div>
             <div>
@@ -338,14 +310,14 @@ export default function Home() {
             <div>
               <h4 className="font-semibold text-white mb-4">Perusahaan</h4>
               <ul className="space-y-2 text-sm">
-                <li><a href="#" className="hover:text-[#FE5B00] transition-colors">Tentang Kami</a></li>
+                <li><a href="https://ramdanisyaputra.my.id" target="_blank" rel="noopener noreferrer" className="hover:text-[#FE5B00] transition-colors">Tentang Kami</a></li>
                 <li><a href="#" className="hover:text-[#FE5B00] transition-colors">Kontak</a></li>
-                <li><a href="#" className="hover:text-[#FE5B00] transition-colors">Privacy</a></li>
+                <li><Link href="/privacy" className="hover:text-[#FE5B00] transition-colors">Privacy</Link></li>
               </ul>
             </div>
           </div>
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-sm">
-            <p>&copy; 2025 AI Freelancer Assistant. All rights reserved.</p>
+            <p>&copy; {new Date().getFullYear()} Ramdani Syaputra. All rights reserved.</p>
           </div>
         </div>
       </footer>
