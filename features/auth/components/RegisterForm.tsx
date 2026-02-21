@@ -149,10 +149,11 @@ export default function RegisterForm() {
                                     } transition-colors appearance-none`}
                             >
                                 <option value="" disabled>Pilih peran Anda</option>
-                                <option value="Fullstack Developer">Fullstack Developer</option>
-                                <option value="Frontend Developer">Frontend Developer</option>
-                                <option value="Backend Developer">Backend Developer</option>
-                                <option value="Mobile Developer">Mobile Developer</option>
+                                <option value="Web/App Developer">Web/App Developer</option>
+                                <option value="Graphic Designer">Graphic Designer</option>
+                                <option value="Content Writer">Content Writer</option>
+                                <option value="Social Media Manager">Social Media Manager</option>
+                                <option value="Translator">Translator</option>
                                 <option value="UI/UX Designer">UI/UX Designer</option>
                                 <option value="Other">Lainnya</option>
                             </select>
@@ -162,7 +163,7 @@ export default function RegisterForm() {
                         {/* Tech Stack Field */}
                         <div className="mb-6">
                             <label htmlFor="stack" className="block text-sm font-medium text-gray-700 mb-2">
-                                Tech Stack (pisahkan dengan koma)
+                                Keahlian / Tech Stack (pisahkan dengan koma)
                             </label>
                             <input
                                 type="text"
@@ -173,7 +174,7 @@ export default function RegisterForm() {
                                 className={`w-full px-4 py-3 rounded-lg border text-gray-900 placeholder-gray-400 ${errors.stack ? 'border-red-500 focus:border-red-500' : 'border-gray-300 focus:border-[#FE5B00]'
                                     } focus:outline-none focus:ring-2 ${errors.stack ? 'focus:ring-red-200' : 'focus:ring-orange-200'
                                     } transition-colors`}
-                                placeholder="React, Laravel, Tailwind CSS, Docker"
+                                placeholder="Adobe Illustrator, Figma, Copywriting, React"
                             />
                             {errors.stack && <p className="mt-2 text-sm text-red-600">{errors.stack}</p>}
                         </div>

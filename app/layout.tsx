@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Lepas AI - Asisten Proposal Freelance & Pekerja Lepas Indonesia",
   description: "Lepas AI membantu pekerja lepas dan freelancer Indonesia membuat proposal profesional, estimasi harga, dan manajemen proyek dengan bantuan AI.",
-  keywords: ["freelance", "pekerja lepas", "proposal", "AI", "Indonesia", "web developer", "estimasi harga"],
+  keywords: ["freelance", "pekerja lepas", "proposal", "AI", "Indonesia", "desain grafis", "penulis", "penerjemah", "estimasi harga"],
 };
 
 export default function RootLayout({

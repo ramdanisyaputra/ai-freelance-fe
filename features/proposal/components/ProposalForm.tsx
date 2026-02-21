@@ -307,7 +307,7 @@ export default function ProposalForm() {
                             id="userBrief"
                             rows={4}
                             className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-orange-100 focus:border-[#FE5B00] transition-all resize-y min-h-[100px] text-gray-800 placeholder-gray-400"
-                            placeholder="Contoh: Saya adalah full-stack developer dengan 5 tahun pengalaman di React dan Laravel. Saya biasa mengerjakan project dengan timeline 2-4 minggu..."
+                            placeholder="Contoh: Saya adalah graphic designer dengan 5 tahun pengalaman di pembuatan branding dan logo. Saya biasa mengerjakan project dengan timeline 1-2 minggu..."
                             value={userBrief}
                             onChange={(e) => setUserBrief(e.target.value)}
                             disabled={isLoading}
@@ -345,7 +345,7 @@ export default function ProposalForm() {
                                 id="brief"
                                 rows={8}
                                 className={`w-full px-4 py-3 rounded-xl border ${error ? 'border-red-300 focus:ring-red-200' : 'border-gray-200 focus:ring-orange-100 focus:border-[#FE5B00]'} transition-all resize-y min-h-[150px] text-gray-800 placeholder-gray-400`}
-                                placeholder="Contoh: Halo mas, saya mau bikin website company profile untuk perusahaan logistik saya. Saya butuh fitur tracking resi sederhana, halaman layanan, dan form kontak. Budget saya sekitar 5 juta. Bisa selesai berapa lama ya?"
+                                placeholder="Contoh: Halo mas, saya mau bikin logo untuk perusahaan logistik saya. Saya butuh logo yang simpel, modern, dan bisa dipakai di berbagai media. Budget saya sekitar 5 juta. Bisa selesai berapa lama ya?"
                                 value={brief}
                                 onChange={(e) => {
                                     setBrief(e.target.value)
@@ -397,7 +397,7 @@ export default function ProposalForm() {
                 <div>
                     <h4 className="text-sm font-semibold text-blue-900 mb-1">Tips agar hasil maksimal:</h4>
                     <p className="text-sm text-blue-700">
-                        Pastikan brief mencakup jenis website (e.g. landing page, toko online), fitur utama yang diinginkan, dan referensi jika ada. Semakin detail brief, semakin akurat estimasi harga dan waktunya.
+                        Pastikan brief mencakup jenis pekerjaan (e.g. desain logo, artikel blog, website), fitur atau hasil utama yang diinginkan, dan referensi jika ada. Semakin detail brief, semakin akurat estimasi harga dan waktunya.
                     </p>
                 </div>
             </div>

@@ -183,14 +183,14 @@ export default function ProfileForm() {
                             id="role"
                             value={role}
                             onChange={(e) => setRole(e.target.value)}
-                            placeholder="e.g. Fullstack Developer"
+                            placeholder="e.g. Desainer Grafis"
                             error={errors.role?.[0]}
                         />
 
                         {/* Tech Stack */}
                         <div className="col-span-1 md:col-span-2">
                             <label className="block text-sm font-medium text-gray-700 mb-1">
-                                Tech Stack
+                                Keahlian / Tech Stack
                             </label>
                             <div className="flex flex-wrap gap-2 mb-2">
                                 {stack.map((item, index) => (

@@ -75,7 +75,7 @@ export default function Home() {
                 <span className="text-[#FE5B00]">3 Menit</span>
               </h1>
               <p className="text-xl text-gray-600 mb-8 leading-relaxed">
-                AI Freelancer Assistant membantu web developer Indonesia mengubah brief klien
+                AI Freelancer Assistant membantu pekerja lepas dan freelancer Indonesia mengubah brief klien
                 menjadi proposal profesional lengkap dengan estimasi harga dan timeline.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
@@ -289,7 +289,7 @@ export default function Home() {
                 <span className="font-bold text-xl text-white">Lepas AI</span>
               </div>
               <p className="text-sm">
-                Membantu freelancer web developer Indonesia membuat proposal lebih cepat dan profesional.
+                Membantu pekerja lepas dan freelancer Indonesia membuat proposal lebih cepat dan profesional.
               </p>
             </div>
             <div>
